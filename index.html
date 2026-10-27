@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No-Spend Challenge — PlanPayLove</title>
+<style>
+:root{--acc:#6B8F71;--acc2:#C9A227;--ink:#1F2937;--mut:#6B7280;--line:#E7E2D5;--card:#FFFFFF;--bg:#FBF6EE}
+body{font-family:Georgia,serif;color:var(--ink);background:var(--bg);margin:0;padding:0}
+.wrap{max-width:860px;margin:0 auto;padding:28px 20px 60px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.brand{font-size:30px;font-weight:800;letter-spacing:.5px}
+.brand small{display:block;font-size:11px;letter-spacing:3px;color:var(--mut);font-weight:400;margin-top:2px}
+.themebar{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:1px;color:var(--mut);font-weight:700}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #ccc;cursor:pointer;padding:0}
+.sw.on{box-shadow:0 0 0 2px var(--acc2)}
+.tbtn{padding:6px 12px;border-radius:20px;border:1.5px solid var(--acc);background:#fff;color:var(--acc);font-weight:700;cursor:pointer;font-family:inherit}
+.tbtn.on{background:var(--acc);color:#fff}
+nav.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 8px}
+nav.tabs button{padding:10px 18px;border-radius:24px;border:1.5px solid var(--line);background:#fff;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink)}
+nav.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+h1{font-size:34px;color:var(--acc);margin:14px 0 6px}
+.lede{color:var(--mut);font-size:17px;margin:0 0 18px}
+section{display:none}
+section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+.card h2{font-size:21px;color:var(--acc);margin:0 0 10px}
+.card h3{font-size:16px;color:var(--acc);margin:18px 0 8px}
+.muted{color:var(--mut);font-size:14px}
+.hero{background:var(--acc);color:#fff;border-radius:16px;padding:26px 26px 22px;margin:14px 0}
+.hero .lbl{font-size:12px;letter-spacing:2.5px;opacity:.85;font-weight:700}
+.hero .num{font-size:56px;font-weight:800;line-height:1.05;margin:6px 0}
+.hero .sub{opacity:.92;font-size:15px}
+.streakchip{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:7px 13px;border-radius:20px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--acc);border-radius:12px;padding:12px 14px}
+.stat .l{font-size:11px;letter-spacing:1.5px;color:var(--mut);font-weight:700}
+.stat .v{font-size:24px;font-weight:800;color:var(--acc);margin-top:4px}
+.stat .v.gold{color:#8A6D1B}
+label{display:block;font-size:13px;font-weight:700;color:var(--mut);margin:12px 0 4px}
+input,select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;box-sizing:border-box}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);border-color:var(--acc)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{padding:12px 20px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-weight:800;cursor:pointer;font-family:inherit;font-size:15px}
+.btn.gold{background:var(--acc2);color:#3D2E00}
+.btn.ghost{background:#fff;border:1.5px solid var(--acc);color:var(--acc)}
+.btn.small{padding:8px 14px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.badge{display:inline-block;background:#FEF3C7;color:#92400E;font-weight:700;padding:6px 12px;border-radius:20px;font-size:13px}
+.demoband{background:var(--acc2);color:#3D2E00;text-align:center;font-weight:800;letter-spacing:1px;padding:9px;font-size:13px}
+.demoband2{position:fixed;right:-42px;top:26px;transform:rotate(45deg);background:var(--acc2);color:#3D2E00;font-weight:800;padding:6px 52px;font-size:12px;letter-spacing:2px;z-index:50}
+.urge{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.urge .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.urge .what{font-weight:800;font-size:17px}
+.urge .amt{font-weight:800;font-size:17px;color:var(--acc);white-space:nowrap}
+.urge .meta{color:var(--mut);font-size:13px;margin-top:4px}
+.pill{display:inline-block;padding:3px 10px;border-radius:14px;font-size:12px;font-weight:800}
+.pill.cooling{background:#FEF3C7;color:#92400E}
+.pill.ready{background:#D1FAE5;color:#065F46}
+.pill.skipped{background:#D1FAE5;color:#065F46}
+.pill.bought{background:#FEE2E2;color:#991B1B}
+.pill.wish{background:#DBEAFE;color:#1E40AF}
+.cd{font-size:26px;font-weight:800;color:#92400E;font-variant-numeric:tabular-nums}
+.prog{height:12px;background:#F1EBDD;border-radius:8px;overflow:hidden;margin:10px 0 4px}
+.prog i{display:block;height:100%;background:var(--acc)}
+.bingo{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.cell{aspect-ratio:1;border:1.5px solid var(--line);border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11.5px;line-height:1.25;padding:6px;cursor:pointer;font-weight:700;color:var(--ink)}
+.cell.marked{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cell.free{background:#FEF3C7;border-color:var(--acc2)}
+.chal{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0;flex-wrap:wrap}
+.chal .nm{font-weight:800;font-size:16px}
+.chal .st{color:var(--mut);font-size:13px;margin-top:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv b{color:var(--acc)}
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.filterbar input{flex:2;min-width:160px}
+.filterbar select{flex:1;min-width:130px}
+.editcard{border:2px solid var(--acc);border-radius:14px;padding:16px 18px;margin:0 0 16px;background:#fff}
+.chiprow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{padding:8px 14px;border-radius:20px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:700;color:var(--ink);font-family:inherit;font-size:14px}
+.chip.on{border-color:var(--acc);background:var(--acc);color:#fff}
+.insight{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:6px}
+.mini{background:#FBF6EE;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mini .l{font-size:11px;letter-spacing:1.2px;color:var(--mut);font-weight:700}
+.mini .v{font-size:19px;font-weight:800;color:var(--acc);margin-top:3px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:96px;margin-top:14px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bar i{display:block;width:100%;background:var(--acc);border-radius:4px 4px 0 0;min-height:2px}
+.bar span{font-size:11px;color:var(--mut)}
+.bar b{font-size:11px;color:var(--ink)}
+.snap{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.btnsmall{padding:7px 12px;font-size:13px}
+.danger{border-color:#B91C1C!important;color:#B91C1C!important}
+.armed{background:#B91C1C!important;color:#fff!important;border-color:#B91C1C!important}
+.wish{border:1px solid #BFDBFE;background:#EFF6FF;border-radius:12px;padding:14px 16px;margin:10px 0}
+body.dark{background:#111827;color:#E5E7EB}
+body.dark .card,body.dark .stat,body.dark .urge,body.dark .chal,body.dark .cell,body.dark .editcard{background:#1F2937;border-color:#374151}
+body.dark input,body.dark select,body.dark textarea{background:#111827;color:#E5E7EB;border-color:#374151}
+body.dark nav.tabs button{background:#1F2937;color:#E5E7EB;border-color:#374151}
+body.dark .tbtn{background:#1F2937}
+body.dark .mini{background:#111827;border-color:#374151}
+body.dark .chip{background:#1F2937;color:#E5E7EB}
+body.dark .wish{background:#1E3A5F;border-color:#374151}
+body.dark .hero{background:#4A6B52}
+body.dark h1,body.dark .card h2,body.dark .card h3{color:#8FB996}
+body.dark .stat .v,body.dark .kv b,body.dark .urge .amt,body.dark .mini .v{color:#8FB996}
+body.dark .prog{background:#374151}
+@media print{.demoband,.demoband2,nav.tabs,.themebar,.btnrow,.btn{display:none!important}}
+@media (max-width:560px){.stats{grid-template-columns:1fr 1fr}.hero .num{font-size:42px}h1{font-size:26px}.grid2{grid-template-columns:1fr}}
+body.theme-sunset{--acc:#C96F4A;--acc2:#E8A94C}
+body.theme-ocean{--acc:#4A7C8C;--acc2:#7FB3C8}
+</style></head><body>
+<div class="demoband" id="demoBand" style="display:none">DEMO — PLANPAYLOVE · EXAMPLE NUMBERS ONLY · FULL APP HAS NO LIMITS</div>
+<div class="demoband2" id="demoRibbon" style="display:none">DEMO</div>
+<div class="wrap">
+<header>
+  <div class="brand">PlanPayLove<small>PLAN IT. PAY IT. LOVE YOUR MONEY.</small></div>
+  <div class="themebar"><span>THEME</span>
+    <button class="sw" data-theme="calm" style="background:#6B8F71" title="Calm Sage"></button>
+    <button class="sw" data-theme="sunset" style="background:#C96F4A" title="Sunset"></button>
+    <button class="sw" data-theme="ocean" style="background:#4A7C8C" title="Ocean"></button>
+    <button class="tbtn on" id="lightBtn">Light</button>
+    <button class="tbtn" id="darkBtn">Dark</button>
+  </div>
+</header>
+<p class="muted" id="themeLine" style="margin:6px 0 0">Theme: Calm Sage · Light mode</p>
+<nav class="tabs">
+  <button data-nav="today" class="on">Today</button>
+  <button data-nav="urges">Urge Log</button>
+  <button data-nav="challenges">Challenges</button>
+  <button data-nav="goals">Goals</button>
+  <button data-nav="backup">Backup</button>
+</nav>
+
+<section id="tab-today" class="on">
+  <h1>No-Spend Challenge</h1>
+  <p class="lede">Every urge you skip is money you keep. This app is your pause button — 24 hours between "I want it" and "I bought it".</p>
+  <p id="demoNote" class="badge" style="display:none">DEMO DATA — filled example. Press "Clear demo &amp; start mine" to use your own numbers.</p>
+  <div class="hero"><div class="lbl">SAVED BY SKIPPING</div><div class="num" id="heroSaved">$0</div>
+    <div class="sub" id="heroSub">That is 0 urges you did not buy — real money, still yours.</div>
+    <div><span class="streakchip" id="heroStreak">🔥 0-day streak</span></div></div>
+  <div class="stats">
+    <div class="stat"><div class="l">CURRENT STREAK</div><div class="v" id="statStreak">0 days</div></div>
+    <div class="stat"><div class="l">SAVED THIS WEEK</div><div class="v" id="statWeek">$0</div></div>
+    <div class="stat"><div class="l">SAVED THIS MONTH</div><div class="v" id="statMonth">$0</div></div>
+    <div class="stat"><div class="l">URGES SKIPPED</div><div class="v gold" id="statSkipped">0</div></div>
+  </div>
+  <div class="btnrow">
+    <button class="btn gold" id="clearDemo">Clear demo &amp; start mine</button>
+    <button class="btn ghost" id="reloadDemo">Reload demo data</button>
+  </div>
+  <div class="card"><h2>Cooling off right now</h2><div id="coolingList"><p class="muted">Nothing cooling off. Log an urge below and the clock starts.</p></div></div>
+  <div class="card"><h2>Fun money — your allowance</h2>
+    <p class="muted" style="margin-top:0">Not every buy is an impulse. Set a monthly fun-money allowance and the app keeps score: bought urges count against it, skipped urges do not.</p>
+    <div class="grid2">
+      <div><label for="inFunBudget">Monthly fun-money allowance (<span class="curSym">$</span>) — 0 means off</label>
+      <input id="inFunBudget" type="number" min="0" step="any" inputmode="decimal" value="0"></div>
+      <div><label>Fun money left this month</label><div class="num" id="funLeft" style="font-size:28px;font-weight:800;color:var(--acc)">—</div>
+      <p class="muted" id="funDetail" style="margin:4px 0 0">Set an allowance to track it.</p></div>
+    </div></div>
+  <div class="card"><h2>Your patterns</h2>
+    <div class="insight">
+      <div class="mini"><div class="l">BIGGEST SINGLE SKIP</div><div class="v" id="insBig">$—</div><div class="muted" id="insBigWhat" style="font-size:12px"></div></div>
+      <div class="mini"><div class="l">TOP TRIGGER</div><div class="v" id="insTrig">—</div><div class="muted" id="insTrigN" style="font-size:12px"></div></div>
+      <div class="mini"><div class="l">SAVED THIS YEAR</div><div class="v" id="insYear">$0</div></div>
+      <div class="mini"><div class="l">AVG SAVED / DAY</div><div class="v" id="insAvg">$0</div></div>
+    </div>
+    <h3 style="margin-top:18px">Saved by month — last 6 months</h3>
+    <div class="bars" id="monthBars"></div>
+  </div>
+  <div class="card"><h2>Log an urge — in 10 seconds</h2>
+    <p class="muted" style="margin-top:0">Something caught your eye? Log it here first. The clock starts, and the urge has to wait.</p>
+    <label for="inWhat">What is it?</label>
+    <input id="inWhat" type="text" placeholder="e.g. New shoes" autocomplete="off">
+    <div class="grid2">
+      <div><label for="inAmount">How much? (<span class="curSym">$</span>)</label>
+      <input id="inAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 75"></div>
+      <div><label for="inTrigger">Trigger</label><select id="inTrigger"></select></div>
+    </div>
+    <div class="grid2">
+      <div><label for="inStrength">Strength (1 = mild, 5 = must-have-now)</label>
+      <select id="inStrength"><option value="1">1 — mild</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5 — must-have-now</option></select></div>
+      <div><label for="inNewTrigger">Add your own trigger</label>
+      <div style="display:flex;gap:8px"><input id="inNewTrigger" type="text" placeholder="e.g. Payday" autocomplete="off"><button class="btn ghost btnsmall" id="addTriggerBtn" type="button">Add</button></div></div>
+    </div>
+    <label>Cooling-off — pick your own length</label>
+    <div class="chiprow">
+      <button class="chip" id="cool12" type="button">12 hours</button>
+      <button class="chip on" id="cool24" type="button">24 hours</button>
+      <button class="chip" id="cool48" type="button">48 hours</button>
+      <button class="chip" id="cool72" type="button">72 hours</button>
+    </div>
+    <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+      <div style="flex:1;min-width:140px"><label for="inCustomHours">Or your own hours</label>
+      <input id="inCustomHours" type="number" min="1" max="720" step="1" placeholder="e.g. 96"></div>
+      <button class="btn" id="coolCustomBtn" type="button">Start custom cooling-off</button>
+    </div>
+    <p class="muted" style="margin:10px 0 0">ADHD brains love the 48-hour rule: if you still want it after two sleeps, it might be real. Most urges are gone by morning.</p>
+    <p class="muted" id="logLimitNote" style="margin:8px 0 0"></p>
+  </div>
+</section>
+
+<section id="tab-urges">
+  <h1>Urge Log</h1>
+  <p class="lede">Every urge, its fate, and what it cost you — or saved you.</p>
+  <div class="filterbar">
+    <input id="uiSearch" type="text" placeholder="Search urges — e.g. shoes" autocomplete="off">
+    <select id="uiFilter"><option value="all">All urges</option><option value="cooling">Cooling off</option><option value="ready">Ready to decide</option><option value="skipped">Skipped</option><option value="bought">Bought</option></select>
+  </div>
+  <div class="editcard" id="editCard" style="display:none">
+    <h2 style="margin:0 0 6px">Edit urge</h2>
+    <p class="muted" style="margin:0 0 8px">Fix a typo or change the amount — the totals update when you save.</p>
+    <label for="inEditWhat">What is it?</label><input id="inEditWhat" type="text" autocomplete="off">
+    <div class="grid2">
+      <div><label for="inEditAmount">How much? (<span class="curSym">$</span>)</label><input id="inEditAmount" type="number" min="0" step="any" inputmode="decimal"></div>
+      <div><label for="inEditTrigger">Trigger</label><select id="inEditTrigger"></select></div>
+    </div>
+    <label for="inEditStrength">Strength</label>
+    <select id="inEditStrength"><option value="1">1 — mild</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 — must-have-now</option></select>
+    <div class="btnrow"><button class="btn" id="editSave">Save changes</button><button class="btn ghost" id="editCancel">Cancel</button></div>
+  </div>
+  <div class="card"><div id="urgeList"></div>
+  <div class="kv"><span>Total urges</span><b id="logTotal">0</b></div>
+  <div class="kv"><span>Skipped</span><b id="logSkipped">0</b></div>
+  <div class="kv"><span>Bought</span><b id="logBought">0</b></div></div>
+</section>
+
+<section id="tab-challenges">
+  <h1>Challenges</h1>
+  <p class="lede">Streaks are built one day at a time. Start small, finish one, then go bigger.</p>
+  <div class="card"><div id="challengeList"></div></div>
+  <div class="card"><h2>Create your own challenge</h2>
+    <p class="muted" style="margin-top:0">A challenge that fits your life — your name, your length. Ramadan, a holiday, a pay cycle: whatever it is.</p>
+    <div class="grid2">
+      <div><label for="inCustomName">Challenge name</label><input id="inCustomName" type="text" placeholder="e.g. No takeaway week" autocomplete="off"></div>
+      <div><label for="inCustomDays">How many days?</label><input id="inCustomDays" type="number" min="1" max="365" step="1" placeholder="e.g. 7"></div>
+    </div>
+    <div class="btnrow"><button class="btn" id="addCustomBtn">Start my challenge</button></div>
+    <p class="muted" id="customLimitNote" style="margin:8px 0 0"></p>
+    <div id="customChallengeList"></div>
+  </div>
+  <div class="card"><h2>No-Spend Bingo</h2>
+    <p class="muted" style="margin-top:0">Mark a square every time you do it. Five in a row — any direction — is a BINGO. The centre square is free, because you showed up.</p>
+    <div class="bingo" id="bingoGrid"></div>
+    <p style="margin:12px 0 0;font-weight:700" id="bingoStatus"></p>
+    <h3>Make bingo yours</h3>
+    <p class="muted" style="margin-top:0">Change any square to a win that fits your life.</p>
+    <div class="grid2">
+      <div><label for="inBingoSquare">Which square?</label><select id="inBingoSquare"></select></div>
+      <div><label for="inBingoLabel">New label</label><input id="inBingoLabel" type="text" placeholder="e.g. Cooked at home" autocomplete="off"></div>
+    </div>
+    <div class="btnrow"><button class="btn" id="updateBingoBtn">Update square</button><button class="btn ghost" id="resetBingoBtn">Reset all labels</button></div>
+  </div>
+</section>
+
+<section id="tab-goals">
+  <h1>Goals</h1>
+  <p class="lede">Every dollar you skip flows into your goal. Watch it fill up at your real pace.</p>
+  <div class="card"><h2>Your goal</h2>
+    <label for="inGoalName">Goal name</label><input id="inGoalName" type="text" autocomplete="off">
+    <label for="inGoalTarget">Target amount (<span class="curSym">$</span>)</label>
+    <input id="inGoalTarget" type="number" min="0" step="any" inputmode="decimal">
+    <div class="btnrow"><button class="btn" id="saveGoal">Save goal</button></div>
+    <p class="muted" id="goalLimitNote" style="margin:8px 0 0"></p>
+    <div style="margin-top:16px"><div style="display:flex;justify-content:space-between"><b id="goalName">—</b><b id="goalSaved">$0 / $0</b></div>
+    <div class="prog"><i id="goalBar" style="width:0%"></i></div>
+    <p class="muted" id="goalDetail" style="margin:6px 0 0"></p>
+    <p style="font-weight:700;margin:6px 0 0" id="goalEta"></p></div>
+    <h3>Finished goals</h3><div id="goalArchive"><p class="muted">No finished goals yet. Finish one and it lands here.</p></div>
+  </div>
+  <div class="card"><h2>Wishlist — planned buys</h2>
+    <p class="muted" style="margin-top:0">An urge survived the cooling-off? It does not have to be a yes or a no. Park it here with a planned date — and buy it on purpose, when the date comes.</p>
+    <div id="wishlistList"><p class="muted">Nothing on your wishlist. When a cooling-off ends, you can move the urge here instead of buying it now.</p></div>
+    <p class="muted" id="wishLimitNote" style="margin:8px 0 0"></p>
+  </div>
+</section>
+
+<section id="tab-backup">
+  <h1>Backup</h1>
+  <p class="lede">Your urges, streaks and goals live in this browser only. Keep a backup — and a safety snapshot — so a cleared browser never costs you your history.</p>
+  <div class="card"><h2>Your data</h2>
+    <div class="btnrow">
+      <button class="btn" id="exportBtn">Download backup (JSON)</button>
+      <button class="btn" id="csvBtn">Download urges (CSV)</button>
+      <button class="btn ghost" id="importBtn">Import backup</button>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+      <button class="btn ghost" id="printBtn">Print summary</button>
+    </div>
+    <p class="muted">Backup often — after every big week. The JSON file restores everything: urges, streaks, goals, wishlist, challenges, bingo and your theme. The CSV opens in Excel or Google Sheets.</p>
+  </div>
+  <div class="card"><h2>Safety snapshots — automatic</h2>
+    <p class="muted" style="margin-top:0">Every time you change something, the app quietly keeps a safety copy of your plan — up to 3, newest first. If anything ever goes wrong, restore one here.</p>
+    <div id="snapshotList"><p class="muted">No snapshots yet. Change something — log an urge, mark a day — and the first one appears.</p></div>
+  </div>
+  <div class="card"><h2>Currency</h2>
+    <label for="inCurrency">Currency symbol</label>
+    <input id="inCurrency" type="text" maxlength="3" style="max-width:120px">
+    <p class="muted">Every amount in the app follows this symbol.</p>
+  </div>
+  <div class="card"><h2>Start over</h2>
+    <p class="muted" style="margin-top:0">Erase everything — urges, streaks, goals, wishlist, challenges, bingo and snapshots — and begin with a clean slate. Your theme stays.</p>
+    <div class="btnrow"><button class="btn ghost danger" id="resetBtn">Reset all my data</button></div>
+  </div>
+</section>
+</div>
+<script>
+var DEMO_BUILD = true;
+var KEY = "planpaylove_nospend_v1";
+var DEMO_KEY = KEY + "_demo";
+var MAX_URGES_DEMO = 10;
+var MAX_GOALS_DEMO = 2;
+var MAX_WISHLIST_DEMO = 3;
+var MAX_CUSTOM_DEMO = 2;
+var DAY = 86400000;
+var HOUR = 3600000;
+var THEMES = {calm:{name:"Calm Sage",acc:"#6B8F71"},sunset:{name:"Sunset",acc:"#C96F4A"},ocean:{name:"Ocean",acc:"#4A7C8C"}};
+var DEFAULT_TRIGGERS = ["Boredom","Stress","Sale / discount","Social media","Friend / ad","Other"];
+var BINGO_LABELS = ["Cooked at home","No takeaway","Packed lunch","Unsubscribed","Waited 48h","Walked, not drove","No new clothes","Drank water","Meal planned","No delivery app","Used what I had","FREE","Sold something","No impulse buy","Library, not shop","Repairs first","Cash only day","No scrolling shops","Made a list","Stuck to the list","No new gadget","Gifted, not bought","Reviewed my urges","No-spend day","Saved the receipt"];
+var PRESETS = [
+  {key:"day",name:"No-Spend Day",days:1,desc:"One whole day, zero impulse buys."},
+  {key:"week",name:"7-Day Low-Buy",days:7,desc:"A week of only the essentials."},
+  {key:"month",name:"30-Day No-Spend",days:30,desc:"The big one. Thirty days of saying wait."}
+];
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function money(n){var c=state.currency||"$";var a=Math.abs(Math.round(n));return (n<0?"-":"")+c+a.toLocaleString("en-US");}
+function fmtDate(ts){var d=new Date(ts);return d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});}
+function todayStart(){var d=new Date();d.setHours(0,0,0,0);return d.getTime();}
+function daysAgo(n){return todayStart()-n*DAY+12*HOUR;}
+function demoData(){
+  return {
+    currency:"$",theme:"calm",dark:false,longestStreak:9,
+    goal:{name:"Emergency fund top-up",target:500},goalArchive:[],
+    urges:[
+      {id:"u1",what:"Sale jacket",amount:120,trigger:"Sale / discount",strength:4,status:"skipped",createdAt:daysAgo(5),hours:24,regret:0},
+      {id:"u2",what:"New sneakers",amount:85,trigger:"Social media",strength:3,status:"skipped",createdAt:daysAgo(4),hours:24,regret:0},
+      {id:"u3",what:"Headphones",amount:60,trigger:"Friend / ad",strength:3,status:"skipped",createdAt:daysAgo(3),hours:48,regret:0},
+      {id:"u4",what:"Takeaway treats",amount:42,trigger:"Boredom",strength:2,status:"skipped",createdAt:daysAgo(2),hours:24,regret:0},
+      {id:"u5",what:"Phone case",amount:25,trigger:"Sale / discount",strength:2,status:"skipped",createdAt:daysAgo(1),hours:24,regret:0},
+      {id:"u6",what:"Designer mug",amount:35,trigger:"Social media",strength:3,status:"cooling",createdAt:Date.now()-6*HOUR,hours:24,regret:0},
+      {id:"u7",what:"Late-night snacks",amount:22,trigger:"Boredom",strength:4,status:"bought",createdAt:daysAgo(5),hours:24,regret:4}
+    ],
+    challenges:{
+      day:{startedAt:todayStart(),daysDone:0,lastMarked:null,done:false},
+      week:{startedAt:daysAgo(4),daysDone:5,lastMarked:daysAgo(0),done:false},
+      month:{startedAt:daysAgo(4),daysDone:5,lastMarked:daysAgo(0),done:false}
+    },
+    bingo:[0,1,2,5,6,10,12,18],
+    funBudget:50,
+    triggers:DEFAULT_TRIGGERS.slice(),
+    wishlist:[{what:"Winter boots",amount:90,planned:todayStart()+7*DAY}],
+    customChallenges:[{name:"No takeaway week",days:7,startedAt:daysAgo(5),daysDone:2,lastMarked:daysAgo(1),done:false}],
+    bingoLabels:null,
+    snapshots:[]
+  };
+}
+function emptyState(){
+  return {currency:"$",theme:"calm",dark:false,longestStreak:0,goal:{name:"",target:0},goalArchive:[],urges:[],
+    challenges:{day:{startedAt:todayStart(),daysDone:0,lastMarked:null,done:false},week:{startedAt:todayStart(),daysDone:0,lastMarked:null,done:false},month:{startedAt:todayStart(),daysDone:0,lastMarked:null,done:false}},
+    bingo:[],funBudget:0,triggers:DEFAULT_TRIGGERS.slice(),wishlist:[],customChallenges:[],bingoLabels:null,snapshots:[]};
+}
+function migrate(s){
+  if(!s) return null;
+  if(!s.triggers) s.triggers=DEFAULT_TRIGGERS.slice();
+  if(s.funBudget==null) s.funBudget=0;
+  if(!s.wishlist) s.wishlist=[];
+  if(!s.customChallenges) s.customChallenges=[];
+  if(s.bingoLabels===undefined) s.bingoLabels=null;
+  if(!s.snapshots) s.snapshots=[];
+  if(!s.goalArchive) s.goalArchive=[];
+  if(s.longestStreak===undefined) s.longestStreak=0;
+  if(!s.challenges) s.challenges=emptyState().challenges;
+  if(!s.bingo) s.bingo=[];
+  return s;
+}
+var state=null;
+function load(){
+  var raw=null;
+  try{raw=localStorage.getItem(DEMO_BUILD?DEMO_KEY:KEY);}catch(e){}
+  if(raw){try{state=migrate(JSON.parse(raw));}catch(e){state=null;}}
+  if(!state) state=demoData();
+  migrate(state);
+}
+function takeSnapshot(){
+  try{
+    var snaps=state.snapshots||[];
+    var last=snaps[0];
+    if(last&&Date.now()-last.at<5*60*1000) return;
+    var copy=JSON.parse(JSON.stringify(state));
+    delete copy.snapshots;
+    snaps.unshift({at:Date.now(),saved:savedSkipped(state),urges:state.urges.length,data:copy});
+    if(snaps.length>3) snaps.length=3;
+    state.snapshots=snaps;
+  }catch(e){}
+}
+function save(){
+  takeSnapshot();
+  try{localStorage.setItem(DEMO_BUILD?DEMO_KEY:KEY,JSON.stringify(state));}catch(e){}
+}
+function lastBuyAt(){
+  var t=0;
+  state.urges.forEach(function(u){if(u.status==="bought"&&u.createdAt>t)t=u.createdAt;});
+  return t;
+}
+function dayStartTs(ts){var d=new Date(ts);d.setHours(0,0,0,0);return d.getTime();}
+function streakDays(){
+  var lb=lastBuyAt();
+  if(lb) return Math.max(0,Math.floor((todayStart()-dayStartTs(lb))/DAY));
+  var skipped=state.urges.filter(function(u){return u.status==="skipped";});
+  if(!skipped.length) return 0;
+  var first=Math.min.apply(null,skipped.map(function(u){return u.createdAt;}));
+  return Math.max(0,Math.floor((todayStart()-dayStartTs(first))/DAY));
+}
+function recordLongest(){
+  var prev=streakDays();
+  if(prev>(state.longestStreak||0))state.longestStreak=prev;
+}
+function savedSkipped(st){var s=0;(st||state).urges.forEach(function(u){if(u.status==="skipped")s+=+u.amount||0;});return s;}
+function savedInRange(from){
+  var s=0;state.urges.forEach(function(u){if(u.status==="skipped"&&u.createdAt>=from)s+=+u.amount||0;});return s;
+}
+function savedThisWeek(){return savedInRange(todayStart()-6*DAY);}
+function savedThisMonth(){var d=new Date();return savedInRange(new Date(d.getFullYear(),d.getMonth(),1).getTime());}
+function savedThisYear(){var d=new Date();return savedInRange(new Date(d.getFullYear(),0,1).getTime());}
+function biggestSkip(){
+  var b=null;state.urges.forEach(function(u){if(u.status==="skipped"&&(!b||u.amount>b.amount))b=u;});
+  return b;
+}
+function topTrigger(){
+  var counts={};
+  state.urges.forEach(function(u){if(u.status==="skipped"){counts[u.trigger]=(counts[u.trigger]||0)+1;}});
+  var top=null,n=0;
+  Object.keys(counts).forEach(function(k){if(counts[k]>n){n=counts[k];top=k;}});
+  return {name:top,count:n};
+}
+function boughtThisMonth(){
+  var d=new Date();var from=new Date(d.getFullYear(),d.getMonth(),1).getTime();
+  var s=0;state.urges.forEach(function(u){if(u.status==="bought"&&u.createdAt>=from)s+=+u.amount||0;});
+  return s;
+}
+function monthlySaved(){
+  var out=[];var now=new Date();
+  for(var i=5;i>=0;i--){
+    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    var from=d.getTime();
+    var to=new Date(d.getFullYear(),d.getMonth()+1,1).getTime();
+    var s=0;state.urges.forEach(function(u){if(u.status==="skipped"&&u.createdAt>=from&&u.createdAt<to)s+=+u.amount||0;});
+    out.push({label:d.toLocaleDateString("en-GB",{month:"short"}),value:s});
+  }
+  return out;
+}
+function coolEnd(u){return u.createdAt+u.hours*HOUR;}
+function coolLeft(u){return coolEnd(u)-Date.now();}
+function fmtCd(ms){
+  if(ms<=0)return "00:00:00";
+  var s=Math.floor(ms/1000);
+  var h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;
+  return (h<10?"0":"")+h+":"+(m<10?"0":"")+m+":"+(sec<10?"0":"")+sec;
+}
+function urgeStatus(u){
+  if(u.status==="cooling"&&coolLeft(u)<=0)return "ready";
+  return u.status;
+}
+function renderStructure(){
+  document.body.className=(state.dark?"dark ":"")+"theme-"+state.theme;
+  document.querySelectorAll(".sw").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-theme")===state.theme);});
+  $("lightBtn").classList.toggle("on",!state.dark);
+  $("darkBtn").classList.toggle("on",!!state.dark);
+  var tn=THEMES[state.theme].name;
+  $("themeLine").textContent="Theme: "+tn+" · "+(state.dark?"Dark":"Light")+" mode";
+  document.querySelectorAll(".curSym").forEach(function(n){n.textContent=state.currency||"$";});
+  $("inGoalName").value=state.goal.name||"";
+  $("inGoalTarget").value=state.goal.target||"";
+  $("inCurrency").value=state.currency||"$";
+  $("inFunBudget").value=state.funBudget||0;
+  var sel=$("inTrigger");var cur=sel.value;
+  sel.innerHTML=state.triggers.map(function(t){return "<option>"+esc(t)+"</option>";}).join("");
+  if(state.triggers.indexOf(cur)>=0)sel.value=cur;
+  var esel=$("inEditTrigger");
+  esel.innerHTML=state.triggers.map(function(t){return "<option>"+esc(t)+"</option>";}).join("");
+  var sq=$("inBingoSquare");
+  if(!sq.options.length){
+    for(var i=0;i<25;i++){var o=document.createElement("option");o.value=i;o.textContent="Square "+(i+1)+" — "+(state.bingoLabels||BINGO_LABELS)[i];sq.appendChild(o);}
+  }
+  var grid=$("bingoGrid");grid.innerHTML="";
+  var labels=state.bingoLabels||BINGO_LABELS;
+  for(var j=0;j<25;j++){
+    var c=document.createElement("div");
+    c.className="cell"+(state.bingo.indexOf(j)>=0?" marked":"")+(j===12?" free":"");
+    c.textContent=labels[j];
+    (function(idx){c.onclick=function(){toggleBingo(idx);};})(j);
+    grid.appendChild(c);
+  }
+}
+function bingoLines(){
+  var b=state.bingo;var lines=0;
+  for(var r=0;r<5;r++){if([0,1,2,3,4].every(function(c){return b.indexOf(r*5+c)>=0;}))lines++;}
+  for(var c2=0;c2<5;c2++){if([0,1,2,3,4].every(function(r){return b.indexOf(r*5+c2)>=0;}))lines++;}
+  if([0,6,12,18,24].every(function(i){return b.indexOf(i)>=0;}))lines++;
+  if([4,8,12,16,20].every(function(i){return b.indexOf(i)>=0;}))lines++;
+  return lines;
+}
+function renderComputed(){
+  var saved=savedSkipped(state);
+  var skipped=state.urges.filter(function(u){return u.status==="skipped";}).length;
+  $("heroSaved").textContent=money(saved);
+  $("heroSub").textContent="That is "+skipped+" urge"+(skipped===1?"":"s")+" you did not buy — real money, still yours.";
+  var st=streakDays();
+  $("heroStreak").textContent="🔥 "+st+"-day streak — longest: "+Math.max(state.longestStreak||0,st)+" days";
+  $("statStreak").textContent=st+" days";
+  $("statWeek").textContent=money(savedThisWeek());
+  $("statMonth").textContent=money(savedThisMonth());
+  $("statSkipped").textContent=skipped;
+  var fb=+state.funBudget||0;
+  if(fb>0){
+    var bought=boughtThisMonth();
+    var left=fb-bought;
+    $("funLeft").textContent=money(left);
+    $("funDetail").textContent="Bought this month: "+money(bought)+" of "+money(fb)+(left<0?" — over by "+money(-left):" left.");
+  }else{
+    $("funLeft").textContent="—";
+    $("funDetail").textContent="Set an allowance to track it.";
+  }
+  var big=biggestSkip();
+  $("insBig").textContent=big?money(big.amount):"$—";
+  $("insBigWhat").textContent=big?esc(big.what):"";
+  var tt=topTrigger();
+  $("insTrig").textContent=tt.name||"—";
+  $("insTrigN").textContent=tt.name?tt.count+" skipped urge"+(tt.count===1?"":"s"):"";
+  $("insYear").textContent=money(savedThisYear());
+  var yearStart=new Date(new Date().getFullYear(),0,1).getTime();
+  var daysY=Math.max(1,Math.floor((Date.now()-yearStart)/DAY)+1);
+  $("insAvg").textContent=money(savedThisYear()/daysY);
+  var months=monthlySaved();
+  var maxM=Math.max.apply(null,months.map(function(m){return m.value;}).concat([1]));
+  var bars=$("monthBars");bars.innerHTML="";
+  months.forEach(function(m){
+    var d=document.createElement("div");d.className="bar";
+    var h=Math.round(m.value/maxM*64);
+    d.innerHTML="<b>"+(m.value?money(m.value):"")+"</b><i style=\"height:"+h+"px\"></i><span>"+m.label+"</span>";
+    bars.appendChild(d);
+  });
+  var cool=state.urges.filter(function(u){return u.status==="cooling";});
+  var cl=$("coolingList");
+  if(!cool.length){cl.innerHTML="<p class=\"muted\">Nothing cooling off. Log an urge below and the clock starts.</p>";}
+  else{
+    cl.innerHTML="";
+    cool.forEach(function(u){
+      var left=coolLeft(u);
+      var ready=left<=0;
+      var d=document.createElement("div");d.className="urge";
+      d.innerHTML="<div class=\"top\"><span class=\"what\">"+esc(u.what)+"</span><span class=\"amt\">"+money(u.amount)+"</span></div>"+
+        "<div class=\"meta\">"+esc(u.trigger)+" · strength "+u.strength+"/5 · "+u.hours+"-hour cooling-off</div>"+
+        "<div style=\"margin:8px 0\"><span class=\"pill "+(ready?"ready":"cooling")+"\">"+(ready?"Ready to decide":"Cooling off")+"</span></div>"+
+        "<div class=\"cd\" data-cd=\""+u.id+"\">"+fmtCd(left)+"</div>"+
+        "<div class=\"btnrow\">"+(ready?
+          "<button class=\"btn small\" onclick=\"skipUrge('"+u.id+"')\">I skipped it ✓ — save "+money(u.amount)+"</button>"+
+          "<button class=\"btn ghost small\" onclick=\"moveToWishlist('"+u.id+"')\">Move to wishlist</button>"+
+          "<button class=\"btn ghost small\" onclick=\"buyUrge('"+u.id+"')\">I bought it</button>":
+          "<button class=\"btn small\" onclick=\"skipUrge('"+u.id+"')\">I skipped it ✓ — save "+money(u.amount)+"</button>"+
+          "<button class=\"btn ghost small\" onclick=\"snoozeUrge('"+u.id+"')\">Snooze +24h</button>"+
+          "<button class=\"btn ghost small\" onclick=\"buyUrge('"+u.id+"')\">I bought it</button>")+"</div>";
+      cl.appendChild(d);
+    });
+  }
+  var q=(ui.search||"").toLowerCase();
+  var f=ui.filter||"all";
+  var list=state.urges.slice().sort(function(a,b){return b.createdAt-a.createdAt;});
+  list=list.filter(function(u){
+    var st2=urgeStatus(u);
+    if(f==="cooling"&&st2!=="cooling")return false;
+    if(f==="ready"&&st2!=="ready")return false;
+    if(f==="skipped"&&st2!=="skipped")return false;
+    if(f==="bought"&&st2!=="bought")return false;
+    if(q&&u.what.toLowerCase().indexOf(q)<0&&u.trigger.toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  var ul=$("urgeList");
+  if(!list.length){ul.innerHTML="<p class=\"muted\">No urges match. Try a different search or filter.</p>";}
+  else{
+    ul.innerHTML="";
+    list.forEach(function(u){
+      var st3=urgeStatus(u);
+      var pill=st3==="cooling"?"cooling":st3==="ready"?"ready":st3==="skipped"?"skipped":"bought";
+      var label=st3==="cooling"?"Cooling off":st3==="ready"?"Ready to decide":st3==="skipped"?"Skipped":"Bought";
+      var d=document.createElement("div");d.className="urge";
+      var html="<div class=\"top\"><span class=\"what\">"+esc(u.what)+"</span><span class=\"amt\">"+money(u.amount)+"</span></div>"+
+        "<div class=\"meta\">"+fmtDate(u.createdAt)+" · "+esc(u.trigger)+" · strength "+u.strength+"/5 · "+u.hours+"h cooling-off</div>"+
+        "<div style=\"margin:8px 0\"><span class=\"pill "+pill+"\">"+label+"</span>"+(u.status==="bought"&&u.regret?" <span class=\"muted\">regret "+u.regret+"/5</span>":"")+"</div>";
+      if(u.status==="bought"&&!u.regretDone&&!u.regret){
+        html+="<div style=\"margin:8px 0\"><label style=\"margin:0 0 4px\">How much do you regret it? (1 = not at all, 5 = a lot)</label><div class=\"chiprow\">"+
+          [1,2,3,4,5].map(function(r){return "<button class=\"chip\" onclick=\"setRegret('"+u.id+"',"+r+")\">"+r+"</button>";}).join("")+"</div></div>";
+      }
+      html+="<div class=\"btnrow\"><button class=\"btn ghost btnsmall\" onclick=\"editUrge('"+u.id+"')\">Edit</button>"+
+        "<button class=\"btn ghost btnsmall danger\" id=\"del-"+u.id+"\" onclick=\"deleteUrge('"+u.id+"')\">Delete</button></div>";
+      d.innerHTML=html;
+      ul.appendChild(d);
+    });
+  }
+  $("logTotal").textContent=state.urges.length;
+  $("logSkipped").textContent=state.urges.filter(function(u){return u.status==="skipped";}).length;
+  $("logBought").textContent=state.urges.filter(function(u){return u.status==="bought";}).length;
+  var ch=$("challengeList");ch.innerHTML="";
+  PRESETS.forEach(function(p){
+    var c=state.challenges[p.key];
+    var d=document.createElement("div");d.className="chal";
+    d.innerHTML="<div><div class=\"nm\">"+p.name+"</div><div class=\"st\">"+p.desc+" "+c.daysDone+" of "+p.days+" days · started "+fmtDate(c.startedAt)+"</div></div>"+
+      "<div class=\"btnrow\" style=\"margin:0\">"+(c.done?"<span class=\"pill skipped\">✓ Done</span>":"<button class=\"btn small\" onclick=\"markChal('"+p.key+"')\">Mark today done</button>")+
+      "<button class=\"btn ghost btnsmall\" onclick=\"resetChal('"+p.key+"')\">Reset</button></div>";
+    ch.appendChild(d);
+  });
+  var cc=$("customChallengeList");cc.innerHTML="";
+  state.customChallenges.forEach(function(c,i){
+    var d=document.createElement("div");d.className="chal";
+    d.innerHTML="<div><div class=\"nm\">"+esc(c.name)+"</div><div class=\"st\">Your challenge · "+c.daysDone+" of "+c.days+" days · started "+fmtDate(c.startedAt)+"</div></div>"+
+      "<div class=\"btnrow\" style=\"margin:0\">"+(c.done?"<span class=\"pill skipped\">✓ Done</span>":"<button class=\"btn small\" onclick=\"markCustom("+i+")\">Mark today done</button>")+
+      "<button class=\"btn ghost btnsmall\" onclick=\"resetCustom("+i+")\">Reset</button>"+
+      "<button class=\"btn ghost btnsmall danger\" id=\"delc-"+i+"\" onclick=\"deleteCustom("+i+")\">Delete</button></div>";
+    cc.appendChild(d);
+  });
+  var lines=bingoLines();
+  $("bingoStatus").textContent=state.bingo.length+" squares marked — "+(lines?lines+" line"+(lines===1?"":"s")+" — BINGO! 🎉":"five in a row is a BINGO.");
+  var saved2=savedSkipped(state);
+  var goalTarget=+state.goal.target||0;
+  var goalSaved=Math.min(saved2,goalTarget);
+  $("goalName").textContent=state.goal.name||"Your goal";
+  $("goalSaved").textContent=money(goalSaved)+" / "+money(goalTarget);
+  var pct=goalTarget?goalSaved/goalTarget*100:0;
+  $("goalBar").style.width=pct+"%";
+  $("goalDetail").textContent=goalTarget?Math.round(pct*10)/10+"% there — "+money(Math.max(0,goalTarget-saved2))+" to go":"Set a target above to track your goal.";
+  var eta="";
+  if(goalTarget&&saved2<goalTarget){
+    var skipped2=state.urges.filter(function(u){return u.status==="skipped";});
+    var firstSkipped=skipped2.length?Math.min.apply(null,skipped2.map(function(u){return u.createdAt;})):null;
+    var daysSince=firstSkipped?Math.max(1,Math.ceil((Date.now()-firstSkipped)/DAY)):0;
+    var avg=daysSince>0?saved2/daysSince:0;
+    if(avg>0){
+      var left2=goalTarget-saved2;
+      var daysLeft=Math.ceil(left2/avg);
+      var dt=new Date(Date.now()+daysLeft*DAY);
+      eta="Finish date: "+dt.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+" — in about "+daysLeft+" day"+(daysLeft===1?"":"s")+" ("+money(avg)+"/day so far)";
+    }
+  }else if(goalTarget&&saved2>=goalTarget){eta="🎉 Goal reached! Save it below to start your next one.";}
+  $("goalEta").textContent=eta;
+  var ga=$("goalArchive");
+  if(state.goalArchive.length){
+    ga.innerHTML=state.goalArchive.map(function(g){return "<div class=\"kv\"><span>"+esc(g.name)+"</span><b>"+money(g.saved)+" ✓</b></div>";}).join("");
+  }else{ga.innerHTML="<p class=\"muted\">No finished goals yet. Finish one and it lands here.</p>";}
+  var wl=$("wishlistList");
+  if(!state.wishlist.length){wl.innerHTML="<p class=\"muted\">Nothing on your wishlist. When a cooling-off ends, you can move the urge here instead of buying it now.</p>";}
+  else{
+    wl.innerHTML="";
+    state.wishlist.forEach(function(w,i){
+      var d=document.createElement("div");d.className="wish";
+      d.innerHTML="<div class=\"top\" style=\"display:flex;justify-content:space-between;gap:10px\"><span class=\"what\" style=\"font-weight:800;font-size:17px\">"+esc(w.what)+"</span><span class=\"amt\" style=\"font-weight:800;color:var(--acc)\">"+money(w.amount)+"</span></div>"+
+        "<div class=\"meta\" style=\"color:var(--mut);font-size:13px;margin-top:4px\">Planned for "+fmtDate(w.planned)+"</div>"+
+        "<div class=\"btnrow\"><button class=\"btn small\" onclick=\"wishlistBuy("+i+")\">I bought it</button>"+
+        "<button class=\"btn ghost small\" onclick=\"wishlistLater("+i+")\">Later +7 days</button>"+
+        "<button class=\"btn ghost small danger\" id=\"delw-"+i+"\" onclick=\"wishlistRemove("+i+")\">Remove</button></div>";
+      wl.appendChild(d);
+    });
+  }
+  var sl=$("snapshotList");
+  var snaps=state.snapshots||[];
+  if(!snaps.length){sl.innerHTML="<p class=\"muted\">No snapshots yet. Change something — log an urge, mark a day — and the first one appears.</p>";}
+  else{
+    sl.innerHTML="";
+    snaps.forEach(function(s,i){
+      var d=document.createElement("div");d.className="snap";
+      d.innerHTML="<div><b>"+new Date(s.at).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+"</b><div class=\"muted\" style=\"font-size:13px\">Saved "+money(s.saved)+" · "+s.urges+" urges</div></div>"+
+        "<button class=\"btn ghost btnsmall\" id=\"snap-"+i+"\" onclick=\"restoreSnapshot("+i+")\">Restore this one</button>";
+      sl.appendChild(d);
+    });
+  }
+  var isDemo=DEMO_BUILD;
+  document.body.classList.toggle("demo-build",isDemo);
+  $("demoBand").style.display=isDemo?"block":"none";
+  $("demoRibbon").style.display=isDemo?"block":"none";
+  $("demoNote").style.display=isDemo?"block":"none";
+  $("exportBtn").disabled=isDemo;
+  $("csvBtn").disabled=isDemo;
+  $("importBtn").disabled=isDemo;
+  $("printBtn").disabled=isDemo;
+}
+function renderAll(){renderStructure();renderComputed();}
+var ui={search:"",filter:"all"};
+var editDraft=null;
+function findUrge(id){for(var i=0;i<state.urges.length;i++)if(state.urges[i].id===id)return state.urges[i];return null;}
+function logUrge(hours){
+  var what=$("inWhat").value.trim();
+  var amt=parseFloat($("inAmount").value);
+  if(!what){alert("What is it? Type the thing first.");return;}
+  if(!(amt>0)){alert("How much does it cost? Add the amount.");return;}
+  if(DEMO_BUILD&&state.urges.length>=MAX_URGES_DEMO){
+    $("logLimitNote").textContent="Demo limit: up to "+MAX_URGES_DEMO+" urges in the demo. The full app has no limit.";
+    return;
+  }
+  state.urges.push({id:"u"+Date.now(),what:what,amount:amt,trigger:$("inTrigger").value,strength:+$("inStrength").value,status:"cooling",createdAt:Date.now(),hours:hours,regret:0});
+  $("inWhat").value="";$("inAmount").value="";
+  save();renderComputed();
+}
+function skipUrge(id){var u=findUrge(id);if(!u)return;u.status="skipped";save();renderComputed();}
+function buyUrge(id){var u=findUrge(id);if(!u)return;recordLongest();u.status="bought";u.regret=0;u.regretDone=false;save();renderComputed();}
+function snoozeUrge(id){var u=findUrge(id);if(!u)return;u.createdAt+=24*HOUR;save();renderComputed();}
+function setRegret(id,r){var u=findUrge(id);if(!u)return;u.regret=r;u.regretDone=true;save();renderComputed();}
+function moveToWishlist(id){
+  var u=findUrge(id);if(!u)return;
+  if(DEMO_BUILD&&state.wishlist.length>=MAX_WISHLIST_DEMO){$("wishLimitNote").textContent="Demo limit: up to "+MAX_WISHLIST_DEMO+" wishlist items in the demo. The full app has no limit.";return;}
+  state.wishlist.push({what:u.what,amount:u.amount,planned:todayStart()+7*DAY});
+  state.urges=state.urges.filter(function(x){return x.id!==id;});
+  save();renderComputed();
+  document.querySelector('nav.tabs button[data-nav="goals"]').click();
+}
+function editUrge(id){
+  var u=findUrge(id);if(!u)return;
+  editDraft={id:id,what:u.what,amount:u.amount,trigger:u.trigger,strength:u.strength};
+  $("inEditWhat").value=u.what;
+  $("inEditAmount").value=u.amount;
+  $("inEditTrigger").value=u.trigger;
+  $("inEditStrength").value=u.strength;
+  $("editCard").style.display="block";
+  $("inEditWhat").focus();
+}
+function deleteUrge(id){
+  var b=$("del-"+id);
+  if(b&&!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Sure? Delete";return;}
+  state.urges=state.urges.filter(function(x){return x.id!==id;});
+  save();renderComputed();
+}
+function toggleBingo(i){
+  var idx=state.bingo.indexOf(i);
+  if(idx>=0)state.bingo.splice(idx,1);else state.bingo.push(i);
+  save();renderStructure();renderComputed();
+}
+function markChal(key){
+  var c=state.challenges[key];
+  if(!c||c.done)return;
+  var today=todayStart();
+  if(c.lastMarked===today)return;
+  c.daysDone++;c.lastMarked=today;
+  if(c.daysDone>=PRESETS.filter(function(p){return p.key===key;})[0].days)c.done=true;
+  save();renderComputed();
+}
+function resetChal(key){
+  state.challenges[key]={startedAt:todayStart(),daysDone:0,lastMarked:null,done:false};
+  save();renderComputed();
+}
+function markCustom(i){
+  var c=state.customChallenges[i];if(!c||c.done)return;
+  var today=todayStart();
+  if(c.lastMarked===today)return;
+  c.daysDone++;c.lastMarked=today;
+  if(c.daysDone>=c.days)c.done=true;
+  save();renderComputed();
+}
+function resetCustom(i){
+  var c=state.customChallenges[i];if(!c)return;
+  c.startedAt=todayStart();c.daysDone=0;c.lastMarked=null;c.done=false;
+  save();renderComputed();
+}
+function deleteCustom(i){
+  var b=$("delc-"+i);
+  if(b&&!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Sure? Delete";return;}
+  state.customChallenges.splice(i,1);
+  save();renderComputed();
+}
+function wishlistBuy(i){
+  var w=state.wishlist[i];if(!w)return;
+  recordLongest();
+  state.urges.push({id:"u"+Date.now(),what:w.what,amount:w.amount,trigger:"Wishlist",strength:3,status:"bought",createdAt:Date.now(),hours:24,regret:0,regretDone:false});
+  state.wishlist.splice(i,1);
+  save();renderComputed();
+}
+function wishlistLater(i){var w=state.wishlist[i];if(!w)return;w.planned+=7*DAY;save();renderComputed();}
+function wishlistRemove(i){
+  var b=$("delw-"+i);
+  if(b&&!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Sure? Remove";return;}
+  state.wishlist.splice(i,1);
+  save();renderComputed();
+}
+function restoreSnapshot(i){
+  var b=$("snap-"+i);
+  if(b&&!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Sure? Restore";return;}
+  var s=(state.snapshots||[])[i];if(!s)return;
+  var snaps=state.snapshots;
+  state=JSON.parse(JSON.stringify(s.data));
+  state.snapshots=snaps;
+  migrate(state);
+  save();renderAll();
+}
+function download(name,text,type){
+  var blob=new Blob([text],{type:type||"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=name;a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+}
+function csvEscape(v){v=String(v==null?"":v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"' : v;}
+document.querySelectorAll("nav.tabs button").forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll("nav.tabs button").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+    document.querySelectorAll("section").forEach(function(s){s.classList.remove("on");});
+    $("tab-"+b.getAttribute("data-nav")).classList.add("on");
+  };
+});
+document.querySelectorAll(".sw").forEach(function(b){
+  b.onclick=function(){state.theme=b.getAttribute("data-theme");save();renderStructure();renderComputed();};
+});
+$("lightBtn").onclick=function(){state.dark=false;save();renderStructure();renderComputed();};
+$("darkBtn").onclick=function(){state.dark=true;save();renderStructure();renderComputed();};
+$("inCurrency").addEventListener("input",function(){state.currency=this.value||"$";save();renderStructure();renderComputed();});
+$("inFunBudget").addEventListener("input",function(){state.funBudget=parseFloat(this.value)||0;save();renderComputed();});
+$("cool12").onclick=function(){logUrge(12);};
+$("cool24").onclick=function(){logUrge(24);};
+$("cool48").onclick=function(){logUrge(48);};
+$("cool72").onclick=function(){logUrge(72);};
+$("coolCustomBtn").onclick=function(){
+  var h=parseInt($("inCustomHours").value,10);
+  if(!(h>=1&&h<=720)){alert("Pick your own hours — any number from 1 to 720.");return;}
+  logUrge(h);
+};
+$("addTriggerBtn").onclick=function(){
+  var v=$("inNewTrigger").value.trim();
+  if(!v)return;
+  if(state.triggers.indexOf(v)<0)state.triggers.push(v);
+  $("inNewTrigger").value="";
+  save();renderStructure();
+  $("inTrigger").value=v;
+};
+$("uiSearch").addEventListener("input",function(){ui.search=this.value;renderComputed();});
+$("uiFilter").addEventListener("change",function(){ui.filter=this.value;renderComputed();});
+$("editSave").onclick=function(){
+  if(!editDraft)return;
+  var u=findUrge(editDraft.id);if(!u){editDraft=null;$("editCard").style.display="none";return;}
+  u.what=$("inEditWhat").value.trim()||u.what;
+  var amt=parseFloat($("inEditAmount").value);
+  if(amt>0)u.amount=amt;
+  u.trigger=$("inEditTrigger").value;
+  u.strength=+$("inEditStrength").value||u.strength;
+  editDraft=null;$("editCard").style.display="none";
+  save();renderComputed();
+};
+$("editCancel").onclick=function(){editDraft=null;$("editCard").style.display="none";};
+$("addCustomBtn").onclick=function(){
+  var name=$("inCustomName").value.trim();
+  var days=parseInt($("inCustomDays").value,10);
+  if(!name){alert("Give your challenge a name first.");return;}
+  if(!(days>=1&&days<=365)){alert("How many days? Any number from 1 to 365.");return;}
+  if(DEMO_BUILD&&state.customChallenges.length>=MAX_CUSTOM_DEMO){
+    $("customLimitNote").textContent="Demo limit: up to "+MAX_CUSTOM_DEMO+" custom challenges in the demo. The full app has no limit.";
+    return;
+  }
+  state.customChallenges.push({name:name,days:days,startedAt:todayStart(),daysDone:0,lastMarked:null,done:false});
+  $("inCustomName").value="";$("inCustomDays").value="";
+  save();renderComputed();
+};
+$("updateBingoBtn").onclick=function(){
+  var idx=parseInt($("inBingoSquare").value,10);
+  var label=$("inBingoLabel").value.trim();
+  if(!label){alert("Type the new label first.");return;}
+  if(!state.bingoLabels)state.bingoLabels=BINGO_LABELS.slice();
+  state.bingoLabels[idx]=label;
+  $("inBingoLabel").value="";
+  save();renderStructure();renderComputed();
+};
+$("resetBingoBtn").onclick=function(){state.bingoLabels=null;save();renderStructure();renderComputed();};
+$("saveGoal").onclick=function(){
+  var name=$("inGoalName").value.trim();
+  var target=parseFloat($("inGoalTarget").value);
+  if(!name){alert("Name your goal first.");return;}
+  if(!(target>0)){alert("Set a target amount first.");return;}
+  if(state.goal.name&&state.goal.name!==name&&savedSkipped(state)>=state.goal.target&&state.goal.target>0){
+    if(DEMO_BUILD&&(state.goalArchive||[]).length>=MAX_GOALS_DEMO){
+      $("goalLimitNote").textContent="Demo limit: the demo keeps up to "+MAX_GOALS_DEMO+" finished goals. The full app has no limit.";
+      return;
+    }
+    state.goalArchive.push({name:state.goal.name,saved:state.goal.target});
+  }
+  state.goal={name:name,target:target};
+  save();renderComputed();
+};
+$("clearDemo").onclick=function(){
+  var theme=state.theme,dark=state.dark,cur=state.currency;
+  state=emptyState();state.theme=theme;state.dark=dark;state.currency=cur;
+  save();renderAll();
+};
+$("reloadDemo").onclick=function(){
+  var theme=state.theme,dark=state.dark,cur=state.currency;
+  state=demoData();state.theme=theme;state.dark=dark;state.currency=cur;
+  save();renderAll();
+};
+$("exportBtn").onclick=function(){download("no-spend-backup.json",JSON.stringify(state,null,2));};
+$("csvBtn").onclick=function(){
+  var rows=[["Date","What","Amount","Trigger","Strength","Status","Regret"]];
+  state.urges.forEach(function(u){rows.push([fmtDate(u.createdAt),u.what,u.amount,u.trigger,u.strength,u.status,u.regret||""]);});
+  download("no-spend-urges.csv",rows.map(function(r){return r.map(csvEscape).join(",");}).join("\n"),"text/csv");
+};
+$("importBtn").onclick=function(){$("importFile").click();};
+$("importFile").addEventListener("change",function(){
+  var f=this.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var s=migrate(JSON.parse(r.result));
+      if(!s||!Array.isArray(s.urges))throw new Error("bad file");
+      state=s;save();renderAll();
+      alert("Backup restored — "+state.urges.length+" urges back in your plan.");
+    }catch(e){alert("That file is not a No-Spend backup. Try the JSON file you downloaded from this app.");}
+  };
+  r.readAsText(f);
+  this.value="";
+});
+$("printBtn").onclick=function(){window.print();};
+$("resetBtn").onclick=function(){
+  var b=$("resetBtn");
+  if(!b.classList.contains("armed")){b.classList.add("armed");b.textContent="Sure? Erase everything";return;}
+  var theme=state.theme,dark=state.dark,cur=state.currency;
+  state=emptyState();state.theme=theme;state.dark=dark;state.currency=cur;
+  b.classList.remove("armed");b.textContent="Reset all my data";
+  save();renderAll();
+};
+setInterval(function(){
+  var need=false;
+  state.urges.forEach(function(u){
+    if(u.status==="cooling"&&coolLeft(u)<=0)need=true;
+    var n=document.querySelector('[data-cd="'+u.id+'"]');
+    if(n)n.textContent=fmtCd(coolLeft(u));
+  });
+  if(need)renderComputed();
+},1000);
+load();
+(function(){
+  var h=(location.hash||"").replace(/^#/,"");
+  var parts=h.split("&"),tab=null;
+  parts.forEach(function(p){
+    var kv=p.split("=");
+    if(kv[0]==="theme"&&THEMES[kv[1]])state.theme=kv[1];
+    if(kv[0]==="dark"&&kv[1]==="1")state.dark=true;
+    if(kv[0]==="dark"&&kv[1]==="0")state.dark=false;
+    if(kv[0]==="tab")tab=kv[1];
+  });
+  if(tab){
+    document.querySelectorAll("nav.tabs button").forEach(function(x){x.classList.toggle("on",x.getAttribute("data-nav")===tab);});
+    document.querySelectorAll("section").forEach(function(s){s.classList.toggle("on",s.id==="tab-"+tab);});
+  }
+})();
+renderAll();
+</script>
+</body></html>
